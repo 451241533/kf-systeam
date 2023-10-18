@@ -1,6 +1,6 @@
 <template>
     <!-- <van-nav-bar  left-text="返回" left-arrow border="false" @click-left="onClickLeft" /> -->
-    <NavTopBar :title="returnTitle"></NavTopBar>
+    <NavTopBar :title="returnTitle"   ></NavTopBar>
     <div class="mine">
         <div class="topCard">
             <van-image class="icon" width="100" height="100" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
@@ -10,7 +10,6 @@
         <div class="footer">
             <span class="footerText">
                 未注册的用户，初次登录时将完成注册，注册即代表您已同意
-
                 用户协议 和 隐私条款
             </span>
         </div>

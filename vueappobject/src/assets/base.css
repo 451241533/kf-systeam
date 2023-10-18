@@ -15,8 +15,18 @@ body {
   background-color: #131742 !important;
   height: 100%;
   width: 100%;
-  font-size: 16px;
   /* 配置全局导航颜色 */
+  --van-tabbar-height: 60px;
+  --van-tabbar-background: rgba(38, 41, 96, 1);
+  --van-tabbar-item-font-size: 12px;
+  --van-tabbar-item-active-background:#979393;
+  /* 导航文字颜色自定义 */
+  /* --van-tabbar-item-text-color:rgba(255, 255, 255, 0.698); 
+  --van-tabbar-item-active-color:rgba(255, 255, 255, 0.698); */
+  --van-tabbar-item-text-color:rgba(255, 255, 255, 0.8); 
+  --van-tabbar-item-active-color:red;
+
+  /* 设置导航栏全局样式 */
   --van-nav-bar-height: 1rem;
   --van-nav-bar-background: #131742;
   --van-nav-bar-arrow-size: .5rem;

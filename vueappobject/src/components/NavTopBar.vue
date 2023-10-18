@@ -1,6 +1,6 @@
 <template>
   <div class="NavTopBar">
-    <van-nav-bar :left-text="title" left-arrow :border="false" @click-left="onClickLeft" />
+    <van-nav-bar :left-text="title" :left-arrow="isShowLeftArrow" :border="false" @click-left="onClickLeft" />
   </div>
 </template>
 <script>
@@ -10,6 +10,10 @@ export default {
     title: {
       type: String,
       default: '返回'
+    },
+    isShowLeftArrow:{
+      type: Boolean,
+      default: true
     }
   },
   setup() {
