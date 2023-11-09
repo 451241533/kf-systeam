@@ -62,12 +62,6 @@ export default defineConfig({
         ws:true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
-    //   headers: { 
-    //     'User-Agent': 'Apifox/1.0.0 (https://apifox.com)', 
-    //     'Accept': '*/*', 
-    //     'Host': 'k3iew.ttdy888.com', 
-    //     'Connection': 'keep-alive'
-    //  }
     },
     reproxy: {
       // 添加 Authorization 头到响应

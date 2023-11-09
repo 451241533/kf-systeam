@@ -32,7 +32,6 @@
                 基础池开通5天方可购
             </div>
             <div class="bottom-right">
-                <!-- <van-button v-if="!isDisabled" icon-prefix="question-o" class="btr-btn" size="small" round>参与挖矿</van-button> -->
                 <div class="left">
                     <van-popover v-model:show="showPopover" theme="dark" :actions="actions">
                         <template #reference>

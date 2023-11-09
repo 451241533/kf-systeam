@@ -19,7 +19,6 @@
 <script>
 import axios from 'axios';
 
-// import {post} from '../../utils/request'
 export default {
     name: 'login',
     data() {
