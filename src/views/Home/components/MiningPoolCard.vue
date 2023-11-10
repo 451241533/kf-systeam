@@ -1,322 +1,315 @@
 <template>
-    <div class="card">
-        <div class="card-top">
-            <div class="image">
-                <img src="../images/wakuang.png" />
-            </div>
-            <div class="message">
-                <div class="kc-type">
+    <div
+        :class="['cardWrap', { 'ordinary-background': data.ordinary, 'periodic-background': data.periodic, 'advanced-background': data.advanced }]">
+        <div class="card">
+            <div class="card-top-title">
+                <div class="card-top-title-left">
                     {{ data.kcType }}
                 </div>
-                <div class="kc-rule">
-                    <p>{{ data.kcRuleText }}</p>
+                <div class="card-top-title-right">
+                    {{ data.ruleCardText }}
                 </div>
-                <div class="kc-ferture">
-                    <div class="ruleCard">
-                        <p>{{ data.ruleCardText }}</p>
+            </div>
+            <div class="card-image">
+                <img :src="data.image" alt="">
+            </div>
+            <div class="card-bottom-text-mode">
+                <div class="card-bottom-text-mode-top">
+                    <div class="card-bottom-text-mode-top-text">
+                        <div class="left">
+                            <!-- 空div -->
+                        </div>
+                        <div class="right">
+                            <p>{{ data.incomeRuleFirstText }}</p>
+                            <p>{{ data.incomeRuleSecondText }}</p>
+                        </div>
                     </div>
-                    <div class="sy-mode">
-                        日化收益 <span class="interestRate">
-                            {{ data.interestRateNumber }}%
-                        </span>
+                    <div class="right-number">
+                        <img class="right-number-image" src="../images/rightimage.png" alt="">
+                        <div>日化收益</div>
+                        <p class="ratio">{{ data.interestRateNumber }}</p> %
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- 分割线 -->
-        <div class="fg-line">
-            <van-divider class="line" :hairline="true" />
-        </div>
-        <div class="card-bottom">
-            <div class="bottom-left">
-                基础池开通5天方可购
-            </div>
-            <div class="bottom-right">
-                <div class="left">
-                    <van-popover v-model:show="showPopover" theme="dark" :actions="actions">
-                        <template #reference>
-                            <van-button class="question-icon">?</van-button>
-                        </template>
-                    </van-popover>
+                <div class="card-bottom-text-mode-bottom">
+                    {{ data.incomeBottomText }}
                 </div>
-                
-                <div class="right">
-                    <van-button icon-prefix="question-o" class="btr-btn"  
-                    color="#314886" 
-                    size="small" round>参与挖矿</van-button>
-
-                </div>
-
             </div>
-
+            <!-- 分割线 -->
+            <div class="line"></div>
+            <div class="card-bottom-btn-mode">
+                <div class="btn-mode">
+                    <div @click="clickToBuyPage"
+                        :class="['btn', { 'ableToPurchase-btn': data.can, 'noableToPurchase-btn': data.none, }]">
+                        参与挖矿
+                    </div> <img class="questionIcon" src="../images/wenhao.png" @click="showPopupHandler" alt="">
+                </div>
+            </div>
+           
         </div>
     </div>
+    
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, defineProps, defineEmits,defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
-export default {
-
+export default defineComponent({
     name: 'kcCard',
     props: {
-        // 是否是首页卡片
-    isHome: {
-      type: Boolean,
-      default: true
-    },
-    isShowLeftArrow:{
-      type: Boolean,
-      default: true
-    }
   },
-    setup() {
-        const showPopover = ref(false);
+    setup({data}, { emit }) {
+        const showPopup = () => {
+      emit('card-click', '参数1', '参数2', '参数3');
+    };
+    const showConfirmationDialog = () => {
+      emit('show-confirmation');
+    };
+    const showPopupHandler = () => {
+      emit('show-popup', '参数1', '参数2', '参数3');
+    };
 
-        // 通过 actions 属性来定义菜单选项
-        const actions = [
-            { text: '选项一' },
-            { text: '选项二' },
-            { text: '选项三' },
-        ];
+        const showConfirmation = ref(data.showConfirmation);
+        const showPopover = ref(false);
+        const router = useRouter()
+    const handleConfirm = () => {
+      showConfirmation.value = false;
+    };
+        const handleClose = (action) => {
+            if (action === 'confirm') {
+            }
+        };
+
         const onSelect = (action) => showToast(action.text);
+        const clickToBuyPage = () => {
+
+            console.log(data.kcType, '-------------datadata')
+            // if (!!data.none) return false
+            router.push({
+                name: 'buypage', // 路由名称
+                query: {
+                    currentType: data.kcType,
+                },
+            });
+        }
 
         return {
-            actions,
+            data,
             onSelect,
+            showPopup,
             showPopover,
+            clickToBuyPage,
+            showPopupHandler,
+            showConfirmation,
+            showConfirmationDialog,
+            handleClose,
+            handleConfirm,
         };
     },
     props: {
-        data:{
+        data: {
             type: Object,
-            require:true,
+            require: true,
         },
-        kcType: {
-            type: String,
-            default: '初级池'
-        },
-        kcRuleText: {
-            type: String,
-            default: '收益每日可取 翻倍出局 | U本位 本金不波动 收益稳定'
-        },
-        ruleCardText: {
-            type: String,
-            default: '本金质押翻倍'
-        },
-        interestRateNumber: {
-            type: Number,
-            default: 0.4
-        }
+        // kcType: {
+        //     type: String,
+        //     default: '初级池'
+        // },
+        // kcRuleText: {
+        //     type: String,
+        //     default: '收益每日可取 翻倍出局 | U本位 本金不波动 收益稳定'
+        // },
+        // ruleCardText: {
+        //     type: String,
+        //     default: '本金质押翻倍'
+        // },
+        // interestRateNumber: {
+        //     type: Number,
+        //     default: 0.4
+        // },
+        // ordinary: {
+        //     type: Boolean,
+        //     default: false // 或者根据需要设置默认值
+        // },
+        // image: {
+        //     type: String,
+        //     default: ''
+        // },
+        // incomeRuleFirstText: {
+        //     type: String,
+        // },
+        // incomeRuleSecondText: {
+        //     type: String,
+        // },
+        // can: {
+        //     type: Boolean,
+        //     default: ''
+        // },
+        // none: {
+        //     type: Boolean,
+        //     default: ''
+
+        // },
+        // // ordinary:Boolean,
+        // periodic: Boolean,
+        // advanced: Boolean,
+
 
     },
-    data() {
-        return {
-            islevel: 'cj',
-            isDisabled: true,
-            // isHighCard: [
-            //     {
-
-            //     }
-            // ]
-        }
-    }
-}
+})
 </script>
-<style scoped>
-.card {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin: 15px auto;
+<style lang="less"  scoped>
+/* 普通卡片颜色 */
+.ordinary-background {
+    background: #22325E;
+}
+
+/* 定投卡片颜色 */
+.periodic-background {
+    background: linear-gradient(90deg, rgba(89, 17, 48, 1) 0%, rgba(89, 17, 48, 1) 0%, rgba(34, 50, 94, 1) 100%, rgba(34, 50, 94, 1) 100%);
+}
+
+/* 高级卡片颜色 */
+.advanced-background {
+    background: linear-gradient(90deg, rgba(15, 70, 70, 1) 0%, rgba(15, 70, 70, 1) 0%, rgba(34, 50, 94, 1) 100%, rgba(34, 50, 94, 1) 100%);
+}
+
+
+
+.cardWrap {
+    margin-top: 10px;
     width: 380px;
-    /* height: 166px; */
-    background-color: #22325e;
+    /* height: 200px; */
     border-radius: 10px;
 
-    .card-top {
-        display: flex;
-        margin-top: 25px;
+    .card {
+        padding: 15px 10px;
 
-        /* 图片部分 */
-        .image {
-            margin-left: 15px;
+        .card-top-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #00ccffcc;
+            margin-top: 3px;
+            margin-bottom: 5px;
 
-        }
-
-        .image>img {
-            width: 50px;
-            color: aliceblue;
-            height: 50px;
-            color: aliceblue;
-        }
-
-        .message {
-            margin-left: 20px;
-            font-size: 16px;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.8);
-
-            .kc-rule {
-                margin: 5px auto;
-                color: #ffffff99;
-                font-size: 12px;
+            .card-top-title-left {
+                font-size: 18px;
+                font-weight: 700;
             }
 
-            .kc-ferture {
-                width: 280px;
-                height: 30px;
-                overflow: hidden;
+            .card-top-title-right {
+                font-size: 14px;
+            }
+        }
+
+        .card-bottom-text-mode {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 15px;
+            border-bottom: .5px solid #6f6d6ddd;
+
+            .card-bottom-text-mode-top {
+                margin-top: 15px;
+                width: 100%;
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                /* width: 50%; */
 
-                .ruleCard {
-                    padding: 2px 5px;
-                    text-align: center;
-                    font-size: 13px;
-                    background: rgba(19, 23, 66, 1);
-                    width: 90px;
-                    height: 24px;
-                    line-height: 24px;
-                    border-radius: 4px;
-                    color: #08B0E3;
+
+                .card-bottom-text-mode-top-text {
+                    display: flex;
+                    align-items: center;
+                    font-size: 12px;
+                    color: #ffffff99;
+                    /* padding-left: 10px; */
+
+                    /* border-left: 2px solid #6f6d6ddd; */
+                    .left {
+                        margin-right: 10px;
+                        width: 2px;
+                        height: 25px;
+                        background: #6f6d6ddd;
+                    }
+
                 }
 
-                .sy-mode {
-                    line-height: 30px;
-                    font-size: 13px;
+                .right-number {
+                    display: flex;
+                    align-items: center;
+                    font-size: 12px;
+                    color: #00ccffcc;
 
-                    .interestRate {
-                        font-size: 24px;
-                        font-weight: 400;
-                        color: #00ccffcc;
+                    .right-number-image {
+                        width: 12px;
+                        height: 12px;
+                    }
+
+                    .ratio {
+                        margin-left: 5px;
+                        font-size: 20px;
                     }
                 }
+            }
 
+            .card-bottom-text-mode-bottom {
+                min-height: 18px;
+                margin-top: 5px;
+                margin-left: 13px;
+                font-size: 12px;
+                color: #ffffff99;
             }
         }
-    }
 
-    .fg-line {
-        width: 350px;
-        margin: 0px;
-        color: #333333;
-        --van-divider-border-color: #868383;
-
-        .van-divider {
-            margin: 10px;
+        .line {
+            width: 100%;
+            height: .1px;
+            background: #85848430;
         }
 
-        .ling {
-            margin: 0px;
-        }
-    }
-
-    .card-bottom {
-        width: 100%;
-        display: flex;
-
-        .bottom-left {
-            width: 50%;
-            text-align: center;
-            font-size: 12px;
-            color: #ffffff99;
-            /* line-height: 48px; */
-            margin-left: 75px;
-        }
-
-        .bottom-right {
-            width: 50%;
-            height: 40px;
+        .card-bottom-btn-mode {
             display: flex;
-            /* overflow: hidden; */
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
 
-            .left {
-                width: 30px;
-                height: 40px;
-                margin-bottom: 30px;
-                margin-left: 30px;
+            /* margin: 15px 0px 10px 0; */
+            margin-top: 10px;
 
-                .question-icon {
-                    width: 30px;
-                    height: 30px;
-                    background: transparent;
-                    color: rgb(192, 191, 191);
-                    border-radius: 50%;
-                    font-weight: 700;
-                    border: .5px solid rgb(192, 191, 191);
-                    margin-bottom: 20px;
-                }
-            }
-
-            .right {
+            .btn-mode {
                 display: flex;
-                justify-content: end;
-                width: 80px;
-                height: 40px;
-                .btr-btn{
-                    width: 80px;
-                    height: 24px;
+                justify-content: center;
+                align-items: center;
+
+                /* 可以购买按钮背景色 */
+                .ableToPurchase-btn {
+                    color: #ffffffcc;
+                    background: linear-gradient(90deg, rgba(241, 107, 171, 1) 0%, rgba(241, 107, 171, 1) 0%, rgba(237, 63, 137, 1) 100%, rgba(237, 63, 137, 1) 100%);
+                }
+
+                /* 不可购买按钮背景色 */
+                .noableToPurchase-btn {
+
+                    color: #ffffff4c;
+
+                    background: #314886;
+                }
+
+                .btn {
+                    min-width: 100px;
+                    min-height: 28px;
+                    border-radius: 100px;
                     font-size: 12px;
+                    line-height: 28px;
+                    text-align: center;
+                    margin-right: 5px;
+                }
+
+                .questionIcon {
+                    width: 20px;
+                    height: 20px;
                 }
             }
-
-            /* 
-            .van-badge__wrapper {
-                display: flex;
-
-                .van-badge--top-right {
-                    top: 100;
-                }
-            }
-
-
-            .btr-btn {
-                width: 80px;
-                height: 24px;
-                font-size: 13px;
-                color: #ffffffcc;
-                margin-right: 20px;
-                margin-bottom: 15px;
-                background-color: rgba(237, 63, 137, 0.9);
-                --van-button-border-width: 0px
-            }
-
-            .van-popover__wrapper {
-                display: block;
-                width: 80px;
-                height: 24px;
-                font-size: 13px;
-                color: #ffffffcc;
-            }
-
-            .btn-icon {
-                position: absolute;
-                top: 100;
-            }
-
-            .question-btn {
-                width: 30px;
-                height: 24px;
-                margin-right: 20px;
-                background-color: red;
-                margin-bottom: 20px;
-
-                .question-icon {
-                    width: 30px;
-                    height: 30px;
-                }
-            } */
         }
     }
 
-    /* 徽标尺寸 */
-    --van-badge-font-size: 20px;
-    --van-badge-size:20px;
-    --van-badge-border-width:0;
-    --van-badge-background: transparent;
-    --van-badge-font-weight:700;
 }
 </style>

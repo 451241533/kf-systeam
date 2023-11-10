@@ -1,6 +1,5 @@
 <template>
-    <div class="promotionalRebateWrap">
-        <div class="table-mode">
+    <div class="table-mode">
             <div class="top-mode">
             <div class="left">
                 <img src="./images/topicon.png" />
@@ -10,16 +9,32 @@
                 更多>
             </div>
         </div>
-        <Table class="rankTable" :option="option" :tableData="tableData"></Table>
+        <Table class="rankTable" :loadMoreData="loadMoreData" ></Table>
         </div>
+    <div class="promotionalRebateWrap">
+        
     </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { ref } from 'vue';
+import { post } from '../../../utils/request';
 import Table from '../../../common/Table/table.vue'
 export default {
     components: { Table },
+    methods: {
+    loadMoreData() {
+      // 这里可以调用接口获取更多数据
+      // 示例中使用 ref 来模拟表格数据
+      getTableList()
+      const newData = [
+        // 新的数据项...
+      ];
+      // 将新数据追加到表格数据中
+      this.tableData.value = [...this.tableData.value, ...newData];
+    },
+  },
     data() {
         return {
             amount: '',
@@ -27,18 +42,18 @@ export default {
             option: {
                 column: [
                     {
-                        label: 'id',
+                        label: 'id/时间/类型',
                         tableDataprop: 'roomType',
 
                     },
-                    {
-                        label: '时间',
-                        tableDataprop: 'closedAccount'
-                    },
-                    {
-                        label: '类型',
-                        tableDataprop: 'noAccount'
-                    },
+                    // {
+                    //     label: '时间',
+                    //     tableDataprop: 'closedAccount'
+                    // },
+                    // {
+                    //     label: '类型',
+                    //     tableDataprop: 'noAccount'
+                    // },
                     {
                         label: '返利金额(ETH)',
                         tableDataprop: 'givePrice'
@@ -78,35 +93,47 @@ export default {
         };
     },
     mounted() {
-        this.getMessage()
+        this.getTableList()
+        // this.getMessage()
     },
     methods: {
-        getMessage() {
-            // const params ={
-            //     unescape:1,
-            //     version:'v61',
-            //     appid:69617844,
-            // }
-            console.log('1111是否执行了')
-            axios.post('api/homeBanner'), ({
-                symbol: 'usdt',
-                amount: 500
+        getTableList() {
+            // post('client/userProfitLog'), ({
+            //     skip:'0'
+            // })
+            //     .then(res => {
+            //         // 请求成功处理逻辑
+            //         console.log(res);
+            //     })
+            //     .catch(error => {
+            //         // 请求失败处理逻辑
+            //         console.error(error);
+            //     })
+            post('client/userProfitLog',{
+                skip: '0'
             })
-                .then(response => {
-
-                    // 请求成功处理逻辑
-                    console.log(response.data);
-                })
-                .catch(error => {
-                    // 请求失败处理逻辑
-                    console.error(error);
-                })
+        .then((res) => {
+          if (res.length !== 0) {
+            bannerArr = res;
+          }
+        })
+        .catch((err) => {
+          console.log(err, '------cuowu');
+        });
 
         },
         toggleAmountVisibility() {
             this.showAmount = !this.showAmount;
         }
-    }
+    },
+    setup() {
+    // 模拟表格数据
+    const tableData = ref([]);
+
+    return {
+      tableData,
+    };
+  },
 }
 </script>
 
@@ -114,12 +141,16 @@ export default {
 .promotionalRebateWrap {
     border-radius: 10px;
     background-color: #22325e;
-    .table-mode{
-        margin: 15px;
-        .top-mode {
+    // .table-mode{
+    //     margin: 15px;
+ 
+    // }
+
+}
+.top-mode {
         display: flex;
         justify-content: space-between;
-        margin: 10px auto;
+        // margin: 10px auto;
         height: 40px;
         width: 100%;
 
@@ -146,6 +177,4 @@ export default {
         }
 
     }
-    }
-
-}</style>
+</style>

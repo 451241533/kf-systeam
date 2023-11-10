@@ -5,27 +5,65 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: () => import('../views/Login/index.vue')
+            component: () => import('../views/Login/index.vue'),
+            meta: {
+                keepAlive: true,
+              }
         },
         {
             path: '/login',
-            component: () => import('../views/Login/index.vue')
+            component: () => import('../views/Login/index.vue'),
+            meta: {
+                keepAlive: true,
+              }
         },
         {
             path: '/home',
-            component: () => import('../views/Home/index.vue')
+            component: () => import('../views/Home/index.vue'),
+            meta: {
+                keepAlive: true,
+              },
+            //   children: [
+            //     {
+            //       path: 'buypage',
+            //       name:'buypage',
+            //       component: () => import('../views/Home/components/BuyPage.vue'),
+            //       meta: {
+            //         keepAlive: true,
+            //       }
+            //     }
+            //   ]
         },
         {
+            path: '/buypage',
+            name:'buypage',
+            component: () => import('../views/Home/components/BuyPage.vue'),
+
+      props: route => ({ currentType: route.query.currentType }),
+            meta: {
+              keepAlive: true,
+            }
+          },
+        {
             path: '/income',
-            component: () => import('../views/Income/index.vue')
+            component: () => import('../views/Income/index.vue'),
+            meta: {
+                keepAlive: true,
+              }
         },
         {
             path: '/mine',
-            component: () => import('../views/Mine/index.vue')
+            component: () => import('../views/Mine/index.vue'),
+            meta: {
+                keepAlive: true,
+              }
         },
         {
             path: '/promotion',
-            component: () => import('../views/Promotion/index.vue')
+            component: () => import('../views/Promotion/index.vue'),
+            meta: {
+                keepAlive: true,
+              }
         },
 
     ]

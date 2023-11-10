@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-  baseURL: 'https://api.example.com',
+  // baseURL: 'https://api.example.com',
   timeout: 5000,  // 请求超时时间
 });
 
@@ -9,8 +9,8 @@ const request = axios.create({
 request.interceptors.request.use(
   config => {
     // 在发送请求之前做些什么，比如添加token到请求头
-    // config.headers.Authorization = 'Bearer ' + getToken();
-    // return config;
+    config.headers.Authorization =  `Bearer ${localStorage.getItem('AUTH-CODE')}`;
+    return config;
   },
   error => {
     // 处理请求错误
@@ -24,7 +24,7 @@ request.interceptors.response.use(
   response => {
     // 响应数据处理，比如处理错误码
     const data = response.data;
-    if (data.code !== 0) {
+    if (data.error !== 0) {
       return Promise.reject(new Error(data.message || '请求失败'));
     }
     return data.data;

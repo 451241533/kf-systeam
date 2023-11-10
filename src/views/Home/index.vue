@@ -1,13 +1,14 @@
 <template>
   <div class="home">
-    <NavTopBar title="马丁交易所" :isShowLeftArrow="false"></NavTopBar>
-    <!-- <div>首页</div> -->
     <div class="content">
-      <!-- 轮播图模块 -->
       <div class="top_swipe">
+        <div class="top-title">
+          马丁交易所
+        </div>
         <van-swipe class="my-swipe" style="height: 200px;" :autoplay="2000" indicator-color="white">
-          <van-swipe-item>banner1</van-swipe-item>
-          <van-swipe-item>banner2</van-swipe-item>
+          <van-swipe-item v-for="(item, index) in bannerArr" :key="index">
+            <img :src="item.url" alt="">
+          </van-swipe-item>
         </van-swipe>
         <div class="homeKcCard-top-wrap">
           <div class="homeKcCard-top">
@@ -16,57 +17,85 @@
               <p>基础矿池</p>
             </div>
             <div class="right">
-              <img src="./images/kcgzIcon.png" />
+              <img src="./images/H.png" />
               <p>矿池规则</p>
             </div>
           </div>
         </div>
-
       </div>
-      <!-- 基础矿池 -->
       <div class="homeKcCard-Group">
-        <div v-for="(item, index ) in cardData.jcKc">
-          <MiningPoolCard :key="index" :data="item" />
+        <div v-for="(item, index) in cardData.jcKc">
+          <MiningPoolCard :key="index" :data="item"   
+        :show-confirmation="showConfirmation"
+        @show-popup="showPopupHandler" />
         </div>
       </div>
-      
-     
+      <div class="adjust-mode">
+        <div class="adjust-title">
+          <img src="./images/jckcIcon.png" />
+          <p>调节矿池</p>
+        </div>
+        <div class="adjust-card-group">
+          <div v-for="(item, index) in cardData.gjKc" :key="index">
+            <MiningPoolCard :data="item" 
+            :key="index"
+        :show-confirmation="showConfirmation"
+        @show-popup="showPopupHandler"
+            />
+          </div>
+        </div>
+      </div>
+      <van-dialog v-model="isDialogVisible" :title="popupParams.param1" :message="popupParams.param2">
+      <template #footer>
+        <van-button @click="closePopup">Close</van-button>
+      </template>
+    </van-dialog>
     </div>
     <Footer></Footer>
   </div>
 </template>
+
 <script>
-import Footer from '../../components/Footer.vue'
-import MiningPoolCard from './components/MiningPoolCard.vue'
-import img from './notice.png'
+import {  ref, reactive, onMounted, defineComponent } from 'vue';
+import Footer from '../../components/Footer.vue';
+import MiningPoolCard from './components/Miningpoolcard.vue';
+import { post } from '../../utils/request';
+import img from './notice.png';
+import ptkcImage from './images/blueImage.png'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-export default {
+
+export default defineComponent({
   name: 'Home',
   components: {
-    Footer, MiningPoolCard, Swiper,
-    SwiperSlide
+    Footer,
+    MiningPoolCard,
+    Swiper,
+    SwiperSlide,
   },
 
   setup() {
-    const onSwiper = (swiper) => {
-      console.log(swiper);
+
+    const showConfirmationDialog = () => {
+      showConfirmation.value = true;
     };
-    const onSlideChange = () => {
-      console.log('slide change');
+    const isDialogVisible = ref(false);
+    const popupParams = ref({
+      param1: '',
+      param2: '',
+      param3: '',
+    });
+    const showPopupHandler= (param1, param2, param3)=> {
     };
-    return {
-      onSwiper,
-      onSlideChange,
-      modules: [Navigation, Pagination, Scrollbar, A11y],
+
+    const closePopup = () => {
+      isDialogVisible.value = false;
     };
-  },
-  data() {
-    return {
+    const data = reactive({
       msg: '数字货币利好哪些股 深圳试点数字货币概念股',
       img: img,
       cardData: {
@@ -76,54 +105,149 @@ export default {
             kcRuleText: '初级矿池文案',
             ruleCardText: '本金质押翻倍', // 小卡片文案
             interestRateNumber: '0.4', //日收益
+            incomeRuleFirstText: '收益每日可取 翻倍出局',
+            incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            image: ptkcImage,
+            can: true,
+            none: true,
+            ordinary: true
           },
           {
             kcType: '矿工池',
-            kcRuleText: '矿工池文案',
+            kcRuleText: '初级矿池文案',
             ruleCardText: '本金质押翻倍', // 小卡片文案
-            interestRateNumber: '0.5', //日收益
+            interestRateNumber: '0.4', //日收益
+            incomeRuleFirstText: '收益每日可取 翻倍出局',
+            incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            incomeBottomText: '基础池开通5天方可购',
+            image: ptkcImage,
+            none: true,
+            ordinary: true
           },
-          {
-            kcType: '矿长池',
-            kcRuleText: '矿工池文案',
-            ruleCardText: '本金质押翻倍', // 小卡片文案
-            interestRateNumber: '0.6', //日收益
-          },
-          {
-            kcType: '机枪池',
-            kcRuleText: '矿工池文案',
-            ruleCardText: '本金质押翻倍', // 小卡片文案
-            interestRateNumber: '0.5', //日收益
-          },
-          {
-            kcType: '矿工池',
-            kcRuleText: '矿工池文案',
-            ruleCardText: '本金质押翻倍', // 小卡片文案
-            interestRateNumber: '0.6', //日收益
-          },
+          // {
+          //   kcType: '矿工池',
+          //   kcRuleText: '矿工池文案',
+          //   ruleCardText: '本金质押翻倍', // 小卡片文案
+          //   interestRateNumber: '0.5', //日收益
+          // },
+          // {
+          //   kcType: '矿长池',
+          //   kcRuleText: '矿工池文案',
+          //   ruleCardText: '本金质押翻倍', // 小卡片文案
+          //   interestRateNumber: '0.6', //日收益
+          // },
+          // {
+          //   kcType: '机枪池',
+          //   kcRuleText: '矿工池文案',
+          //   ruleCardText: '本金质押翻倍', // 小卡片文案
+          //   interestRateNumber: '0.5', //日收益
+          // },
+          // {
+          //   kcType: '矿工池',
+          //   kcRuleText: '矿工池文案',
+          //   ruleCardText: '本金质押翻倍', // 小卡片文案
+          //   interestRateNumber: '0.6', //日收益
+          // },
         ],
         gjKc: [
           {
             kcType: '定投池',
             kcRuleText: '初级矿池文案',
             ruleCardText: '本金质押翻倍', // 小卡片文案
-            interestRateNumber: '0.7', //日收益
+            interestRateNumber: '1.0', //日收益
+            incomeRuleFirstText: '收益每日可取 翻倍出局',
+            incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            // incomeBottomText:'基础池开通5天方可购',
+            image: ptkcImage,
+            can: true,
+            advanced: true
           },
           {
             kcType: '高级池',
-            kcRuleText: '矿工池文案',
+            kcRuleText: '初级矿池文案',
             ruleCardText: '本金质押翻倍', // 小卡片文案
             interestRateNumber: '0.8', //日收益
+            incomeRuleFirstText: '收益每日可取 翻倍出局',
+            incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            image: ptkcImage,
+            can: true,
+            periodic: true
           },
-        ]
-      }
+        ],
+      },
+      message: 'Hello Vue 3!',
+      count: 0,
+    });
+    const bannerArr = ref([])
+
+    const onSwiper = (swiper) => {
+      console.log(swiper);
+    };
+    const onSlideChange = () => {
+      console.log('slide change');
+    };
+
+
+
+    // 查询首页轮播图
+    const getBanner = () => {
+      post('client/homeBanner')
+        .then((res) => {
+          if (res.length !== 0) {
+            bannerArr.value = res
+          }
+        })
+        .catch((err) => {
+          console.log(err, '------cuowu');
+        });
     }
+
+    const getEthPrice = () => {
+      post('client/ethPrice')
+        .then((res) => {
+          if (res.length !== 0) {
+          }
+        })
+        .catch((err) => {
+          console.log(err, '------cuowu');
+        });
+    };
+    onMounted(() => {
+      // 查询轮播图
+      getBanner();
+      // 查询eth价格
+      getEthPrice();
+    });
+    const showConfirmation = ref(false);
+    // const bannerArr = ref([])
+
+
+    const handleClose = (action) => {
+      // 处理弹窗关闭事件
+    };
+
+    const handleConfirm = () => {
+      // 处理弹窗确认事件
+      showConfirmation.value = false;
+    };
+
+    return {
+      ...data,
+      isDialogVisible,
+      popupParams,
+      showPopupHandler,
+      closePopup,
+      bannerArr,
+      onSwiper,
+      onSlideChange,
+      showConfirmation,
+      showConfirmationDialog,
+      handleClose,
+      handleConfirm,
+      modules: [Navigation, Pagination, Scrollbar, A11y],
+    };
   },
-  mounted() {
-  },
-  methods: {
-  },
-};
+});
 </script>
 
 <style lang="less" scoped>
@@ -139,11 +263,23 @@ export default {
     /* center代表水平方向 */
     justify-content: center;
     flex: 1;
+    overflow-y: scroll;
     // overflow-y: auto;
     padding: 3px 5px;
+    padding-bottom: 100px;
 
     .top_swipe {
       position: relative;
+
+      .top-title {
+        margin-left: 20px;
+        color: #ffffffcc;
+        font-size: 20px;
+        z-index: 999;
+        background: transparent;
+        position: absolute;
+        top: 10px;
+      }
 
       .my-swipe {
         .van-swipe-item {
@@ -153,24 +289,35 @@ export default {
           text-align: center;
           background-color: black;
         }
+
+        img {
+          height: 180px;
+        }
       }
 
       .homeKcCard-top-wrap {
+        display: none;
         display: flex;
         justify-content: center;
         position: absolute;
-        bottom: -30px;
+        left: 10px;
+        bottom: -10px;
         z-index: 100;
-        background-color: rgb(19, 23, 66);
+        height: 50px;
+        // background-color: rgb(19, 23, 66);
         border-radius: 10px;
-        width: 100%;
+        background: #131742;
+        width: 380px;
 
         .homeKcCard-top {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          width: 390px;
-          height: 64px;
+          width: 380px;
+          background: #131742;
+          // border-radius: 3px;
+          margin: 10px;
+          padding-bottom: 10px;
 
           .left,
           .right {
@@ -193,6 +340,11 @@ export default {
             font-size: 12px;
             color: #ffffff99;
             justify-content: end;
+
+            img {
+              width: 16px;
+              height: 16px;
+            }
           }
         }
       }
@@ -200,7 +352,7 @@ export default {
     }
 
     ::v-deep .van-swipe__indicators {
-      bottom: 60px;
+      bottom: 50px;
     }
   }
 
@@ -214,10 +366,38 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     margin-top: 15px;
     width: 100%;
-    overflow-y: scroll;
+    // overflow-y: scroll;
   }
 
-}
-</style>
+  .adjust-mode {
+    .adjust-title {
+      display: flex;
+      align-items: center;
+      margin: 10px 15px;
+      margin-top: 15px;
+      font-weight: 700;
+      font-style: normal;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.8);
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+      }
+    }
+
+    .adjust-card-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      // margin-top: 15px;
+      width: 100%;
+    }
+  }
+
+}</style>

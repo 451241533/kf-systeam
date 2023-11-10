@@ -5,21 +5,6 @@ import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from '@vant/auto-import-resolver';
 
 
-// module.exports = {
-//   devServer: {
-//     proxy: {
-//       '/api': {
-//         target: 'http://k3iew.tt7854.com/api/martinv1/client',
-//         changeOrigin: true,
-//         pathRewrite: {
-//           '^/api': ''
-//         },
-//         headers: {
-//           'Authorization': 'Bearer',
-//           'X-Access-Token': 'jBRgFht6w2hkwrIg5wGZXI3WtQqaG16cnfFr2Voge6e7114c'
-//         }}}
-//   }
-// };
 export default defineConfig({
   plugins: [
     vue(),
@@ -50,7 +35,6 @@ export default defineConfig({
       // auth
       '/client': {
         target: 'http://k3iew.ttdy888.com/api/martinv1/client',
-        // target: 'http://v1.yiketianqi.com', // 测试接口
         changeOrigin: true,
         ws:true,
         rewrite: (path) => path.replace(/^\/client/, '')
