@@ -10,9 +10,8 @@
             <img :src="item.url" alt="">
           </van-swipe-item>
         </van-swipe>
-        <div class="homeKcCard-top-wrap">
-          <div class="homeKcCard-top">
-            <div class="left">
+        <div class="title-top">
+          <div class="left">
               <img src="./images/jckcIcon.png" />
               <p>基础矿池</p>
             </div>
@@ -20,7 +19,6 @@
               <img src="./images/H.png" />
               <p>矿池规则</p>
             </div>
-          </div>
         </div>
       </div>
       <div class="homeKcCard-Group">
@@ -51,7 +49,6 @@
       </template>
     </van-dialog>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -109,14 +106,14 @@ export default defineComponent({
             incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
             image: ptkcImage,
             can: true,
-            none: true,
+            none: false,
             ordinary: true
           },
           {
             kcType: '矿工池',
             kcRuleText: '初级矿池文案',
             ruleCardText: '本金质押翻倍', // 小卡片文案
-            interestRateNumber: '0.4', //日收益
+            interestRateNumber: '0.5', //日收益
             incomeRuleFirstText: '收益每日可取 翻倍出局',
             incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
             incomeBottomText: '基础池开通5天方可购',
@@ -124,30 +121,43 @@ export default defineComponent({
             none: true,
             ordinary: true
           },
-          // {
-          //   kcType: '矿工池',
-          //   kcRuleText: '矿工池文案',
-          //   ruleCardText: '本金质押翻倍', // 小卡片文案
-          //   interestRateNumber: '0.5', //日收益
-          // },
-          // {
-          //   kcType: '矿长池',
-          //   kcRuleText: '矿工池文案',
-          //   ruleCardText: '本金质押翻倍', // 小卡片文案
-          //   interestRateNumber: '0.6', //日收益
-          // },
-          // {
-          //   kcType: '机枪池',
-          //   kcRuleText: '矿工池文案',
-          //   ruleCardText: '本金质押翻倍', // 小卡片文案
-          //   interestRateNumber: '0.5', //日收益
-          // },
-          // {
-          //   kcType: '矿工池',
-          //   kcRuleText: '矿工池文案',
-          //   ruleCardText: '本金质押翻倍', // 小卡片文案
-          //   interestRateNumber: '0.6', //日收益
-          // },
+          {
+            kcType: '矿长池',
+            kcRuleText: '初级矿池文案',
+            ruleCardText: '本金质押翻倍', // 小卡片文案
+            interestRateNumber: '0.6', //日收益
+            incomeRuleFirstText: '收益每日可取 翻倍出局',
+            incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            incomeBottomText: '需用200USDT价值的平台币购买',
+            image: ptkcImage,
+            can: true,
+            none: true,
+            ordinary: true
+          },
+          {
+            kcType: '机枪池',
+            kcRuleText: '初级矿池文案',
+            ruleCardText: '本金质押翻倍', // 小卡片文案
+            interestRateNumber: '0.7', //日收益
+            incomeRuleFirstText: '收益每日可取 翻倍出局',
+            incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            incomeBottomText: '需用300USDT价值的平台币购买',
+            image: ptkcImage,
+            none: true,
+            ordinary: true
+          },
+          {
+            kcType: '头矿池',
+            kcRuleText: '初级矿池文案',
+            ruleCardText: '本金质押翻倍', // 小卡片文案
+            interestRateNumber: '0.7', //日收益
+            incomeRuleFirstText: '收益每日可取 翻倍出局',
+            incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            incomeBottomText: '需用400USDT价值的平台币购买',
+            image: ptkcImage,
+            none: true,
+            ordinary: true
+          },
         ],
         gjKc: [
           {
@@ -157,9 +167,10 @@ export default defineComponent({
             interestRateNumber: '1.0', //日收益
             incomeRuleFirstText: '收益每日可取 翻倍出局',
             incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
-            // incomeBottomText:'基础池开通5天方可购',
+            incomeBottomText:'需用400USDT价值的平台币购买',
             image: ptkcImage,
-            can: true,
+            can: false,
+            none:true,
             advanced: true
           },
           {
@@ -169,8 +180,10 @@ export default defineComponent({
             interestRateNumber: '0.8', //日收益
             incomeRuleFirstText: '收益每日可取 翻倍出局',
             incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
+            incomeBottomText:'需用400USDT价值的平台币购买',
             image: ptkcImage,
-            can: true,
+            can: false,
+            none:true,
             periodic: true
           },
         ],
@@ -212,6 +225,7 @@ export default defineComponent({
           console.log(err, '------cuowu');
         });
     };
+    
     onMounted(() => {
       // 查询轮播图
       getBanner();
@@ -287,7 +301,6 @@ export default defineComponent({
           color: #fff;
           font-size: 20px;
           text-align: center;
-          background-color: black;
         }
 
         img {
@@ -295,56 +308,33 @@ export default defineComponent({
         }
       }
 
-      .homeKcCard-top-wrap {
-        display: none;
+      .title-top{
         display: flex;
-        justify-content: center;
-        position: absolute;
-        left: 10px;
-        bottom: -10px;
-        z-index: 100;
-        height: 50px;
-        // background-color: rgb(19, 23, 66);
-        border-radius: 10px;
-        background: #131742;
-        width: 380px;
-
-        .homeKcCard-top {
+        justify-content: space-between;
+        align-items: center;
+        margin: auto 15px;
+        .left{
           display: flex;
           justify-content: space-between;
           align-items: center;
-          width: 380px;
-          background: #131742;
-          // border-radius: 3px;
-          margin: 10px;
-          padding-bottom: 10px;
-
-          .left,
-          .right {
-            width: 50%;
-            display: flex;
-            // justify-content: start;
-            font-weight: 700;
-            font-style: normal;
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.8);
-
-            img {
-              width: 20px;
-              height: 20px;
-              margin-right: 10px;
-            }
+          font-size: 16px;
+          color: #ffffffcc;
+          img{
+            margin-right: 5px;
+            width: 18px;
+            height: 18px;
           }
-
-          .right {
-            font-size: 12px;
-            color: #ffffff99;
-            justify-content: end;
-
-            img {
-              width: 16px;
-              height: 16px;
-            }
+        }
+        .right{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: #ffffff99;
+          font-size: 12px;
+          img{
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
           }
         }
       }
@@ -367,7 +357,6 @@ export default defineComponent({
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 15px;
     width: 100%;
     // overflow-y: scroll;
   }

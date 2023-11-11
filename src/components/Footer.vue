@@ -1,5 +1,5 @@
 <template>
-    <div class="footerMain">
+    <div class="footerMain" v-if="showFooter" >
         <van-tabbar v-model="active"   active-color="#fffffb2" inactive-color="#eeeee">
             <van-tabbar-item :to="(item.name)" @click="tabIndex(index)" v-for="(item, index) in tabbars"
                 :key="'tabbar' + index">
@@ -19,6 +19,7 @@ import promotion from '../assets/images/promotion.png'
 export default {
     data() {
         return {
+            showFooter: false, // 默认显示 Footer
             active: 0, //默认选中tab
             tabbars:[
                 {
@@ -44,6 +45,18 @@ export default {
             ]
         };
     },
+    computed: {
+    // 从路由中获取当前页面的元信息
+    currentRouteMeta() {
+      return this.$route.meta || {};
+    },
+  },
+  watch: {
+    // 监听路由变化，更新 showFooter 的值
+    $route(to, from) {
+      this.showFooter = this.currentRouteMeta.showFooter !== false;
+    },
+  },
     mounted() {
         // 如有缓存，刷新页面时还进入该页面
         let index = sessionStorage.getItem('tabIndex')
@@ -65,29 +78,21 @@ export default {
 </script>
 <style lang="less" scoped>
 .footerMain {
-    // .van-tabbar-item--active{
-    //     color: red;
-    // }
-    // .van-tabbar-item__icon{
-    //     color: red;
-    //     img{
-    //     color: red;
-    // }
-    // }
     display: flex;
     background: #fff;
     justify-content: space-around;
     padding-bottom: 2px;
     padding-top: 2px;
     color: black !important;
-    border-top: 0.5px solid rgb(121, 121, 121);
-
+    .van-tabbar-item--active {
+        color: #00ccffcc; 
+        background-color: #0b3840aa; 
+        border-radius: 10px; 
+        
+    }
     .item {
-        // flex: 1;
         font-size: 5px;
         font-weight: 700;
-        // color: rgb(255, 255, 255);
-        // color: rgb(51, 51, 51);
         color: black !important;
         cursor: pointer;
 

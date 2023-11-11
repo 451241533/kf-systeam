@@ -21,10 +21,7 @@ body {
   --van-tabbar-item-font-size: 12px;
   --van-tabbar-item-active-background:#979393;
   /* 导航文字颜色自定义 */
-  /* --van-tabbar-item-text-color:rgba(255, 255, 255, 0.698); 
-  --van-tabbar-item-active-color:rgba(255, 255, 255, 0.698); */
   --van-tabbar-item-text-color:rgba(255, 255, 255, 0.8); 
-  --van-tabbar-item-active-color:red;
 
   /* 设置导航栏全局样式 */
   --van-nav-bar-height: 1rem;

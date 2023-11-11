@@ -40,22 +40,39 @@
           </div>
         </div>
       </div>
-      <div class="loginOrOutBtn">
+      <div  @click="clickLogout"  class="loginOrOutBtn">
         <p>
           退出登陆/切换账号
         </p>
       </div>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 <script>
 import UserCard from './components/UserCard.vue'
 import WithdrawCard from './components/WithdrawCard.vue'
-import Footer from '../../components/Footer.vue'
+import { post } from '../../utils/request'
 export default {
   name: 'mine',
-  components: { Footer, UserCard, WithdrawCard }
+  components: { UserCard, WithdrawCard },
+  setup(){
+    const clickLogout =()=>{
+      post('client/logout')
+        .then((res) => {
+          if (res.length !== 0) {
+            localStorage.clear()
+            sessionStorage.clear()
+            window.location.reload()
+          }
+        })
+        .catch((err) => {
+          console.log(err,);
+        });
+    }
+    return {
+      clickLogout
+    }
+  }
 };
 </script>
 

@@ -41,7 +41,7 @@
                     <div @click="clickToBuyPage"
                         :class="['btn', { 'ableToPurchase-btn': data.can, 'noableToPurchase-btn': data.none, }]">
                         参与挖矿
-                    </div> <img class="questionIcon" src="../images/wenhao.png" @click="showPopupHandler" alt="">
+                    </div> <img v-show="data.none" class="questionIcon" src="../images/wenhao.png" @click="showPopupHandler" alt="">
                 </div>
             </div>
            
@@ -83,7 +83,7 @@ export default defineComponent({
         const clickToBuyPage = () => {
 
             console.log(data.kcType, '-------------datadata')
-            // if (!!data.none) return false
+            if (!!data.none) return false
             router.push({
                 name: 'buypage', // 路由名称
                 query: {

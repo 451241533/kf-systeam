@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
+import { post } from  '../../utils/request'
 
 export default {
     name: 'login',
@@ -39,7 +39,7 @@ export default {
   },
     methods: {
         beforGetNotice(){
-            axios.post('api/getNotice').then(res=>{
+            post('api/getNotice').then(res=>{
                 console.log(res, '---------res')
                 if(res.error === 0){
                     // window.alert(res.data.msg)
@@ -52,19 +52,22 @@ export default {
             })
         },
         loginHandleAuth() {
+            //  0x6288844254443F95FCa2571bC13A3bbBb6C6087d  已注册——有币
+
+            //  文档提供—— 0x6A5A42F785F4181075e6D4f68a984F00e43EeAee
             const params = {
                 account: '0x6A5A42F785F4181075e6D4f68a984F00e43EeAee',
                 hexMsg: 'abc123',
                 signedMsg: '0x089ea5a192fc25179723d30cd120839037eda67284029a4f8b43ebfc7c70eaa4279b22ab29b2b22aba147381618c609822c97c5dcc5542d048b1dc67ca2500dd1c'
             }
 
-            axios.post('api/login',params).then(res=>{
-                if(res.data.error === 0){
-                    localStorage.setItem('AUTH-CODE',res.data.data)
+            post('api/login',params).then(res=>{
+                if(res.error === 0){
+                    localStorage.setItem('AUTH-CODE',res.data)
                     this.$router.push('/home')
                 }
             }).catch(err=>{
-                console.log(err, '------cuowu')
+                console.log(err)
             })
 
             // axios.post('api/login'), ({

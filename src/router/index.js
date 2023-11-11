@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
@@ -8,6 +7,7 @@ const router = createRouter({
             component: () => import('../views/Login/index.vue'),
             meta: {
                 keepAlive: true,
+                showFooter: false,
               }
         },
         {
@@ -15,6 +15,7 @@ const router = createRouter({
             component: () => import('../views/Login/index.vue'),
             meta: {
                 keepAlive: true,
+                showFooter: false,
               }
         },
         {
@@ -22,17 +23,9 @@ const router = createRouter({
             component: () => import('../views/Home/index.vue'),
             meta: {
                 keepAlive: true,
+                showFooter: true,
+                requiresAuth: true,
               },
-            //   children: [
-            //     {
-            //       path: 'buypage',
-            //       name:'buypage',
-            //       component: () => import('../views/Home/components/BuyPage.vue'),
-            //       meta: {
-            //         keepAlive: true,
-            //       }
-            //     }
-            //   ]
         },
         {
             path: '/buypage',
@@ -41,7 +34,9 @@ const router = createRouter({
 
       props: route => ({ currentType: route.query.currentType }),
             meta: {
-              keepAlive: true,
+                keepAlive: true,
+                showFooter: true,
+                requiresAuth: true,
             }
           },
         {
@@ -49,6 +44,8 @@ const router = createRouter({
             component: () => import('../views/Income/index.vue'),
             meta: {
                 keepAlive: true,
+                showFooter: true,
+                requiresAuth: true,
               }
         },
         {
@@ -56,6 +53,8 @@ const router = createRouter({
             component: () => import('../views/Mine/index.vue'),
             meta: {
                 keepAlive: true,
+                showFooter: true,
+                requiresAuth: true,
               }
         },
         {
@@ -63,6 +62,8 @@ const router = createRouter({
             component: () => import('../views/Promotion/index.vue'),
             meta: {
                 keepAlive: true,
+                showFooter: true,
+                requiresAuth: true,
               }
         },
 
@@ -70,20 +71,18 @@ const router = createRouter({
 })
 
 
-//全局前置路由，配合浏览器localStorage进行鉴权操作
-// router.beforeEach((to, from, next) =>{
-//     console.log(to,'')
-//     //首先，我们先看一看to和from参数，next就是执行的意思，不写页面是不会跳转的
-//     // // console.log(to, from);
-//     // if(to.meta.isAuth){     //判断是否需要鉴权
-//     //     if(localStorage.getItem('name') === '张三'){
-//     //         next();
-//     //     }else{
-//     //         alert('不好意思，姓名不对，没有权限');
-//     //     }
-//     // }else{
-//     //     next()
-//     // }
-// })
+router.beforeEach(async (to, from, next) => {
+    if (to.meta.requiresAuth) {
+      const isAuthenticated =  localStorage.getItem('AUTH-CODE');
+  
+      if (isAuthenticated) {
+        next();
+      } else {
+        next({ path: '/login', query: { redirect: to.fullPath } });
+      }
+    } else {
+      next();
+    }
+  });
 
 export default router;
