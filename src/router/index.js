@@ -35,7 +35,7 @@ const router = createRouter({
       props: route => ({ currentType: route.query.currentType }),
             meta: {
                 keepAlive: true,
-                showFooter: true,
+                showFooter: false,
                 requiresAuth: true,
             }
           },
