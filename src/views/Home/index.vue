@@ -24,8 +24,9 @@
       <div class="homeKcCard-Group">
         <div v-for="(item, index) in cardData.jcKc">
           <MiningPoolCard :key="index" :data="item"   
-        :show-confirmation="showConfirmation"
-        @show-popup="showPopupHandler" />
+          ref="miningPoolCardRef"
+          @open-parent-modal="openParentModal"
+         />
         </div>
       </div>
       <div class="adjust-mode">
@@ -36,25 +37,22 @@
         <div class="adjust-card-group">
           <div v-for="(item, index) in cardData.gjKc" :key="index">
             <MiningPoolCard :data="item" 
+            ref="miningPoolCardRef"
+          @open-parent-modal="openParentModal"
             :key="index"
-        :show-confirmation="showConfirmation"
-        @show-popup="showPopupHandler"
             />
           </div>
         </div>
       </div>
-      <van-dialog v-model="isDialogVisible" :title="popupParams.param1" :message="popupParams.param2">
-      <template #footer>
-        <van-button @click="closePopup">Close</van-button>
-      </template>
-    </van-dialog>
     </div>
+    <Modal ref="modalRef"  />
   </div>
 </template>
 
 <script>
 import {  ref, reactive, onMounted, defineComponent } from 'vue';
 import Footer from '../../components/Footer.vue';
+import Modal from '../../components/Modal.vue'
 import MiningPoolCard from './components/Miningpoolcard.vue';
 import { post } from '../../utils/request';
 import img from './notice.png';
@@ -73,25 +71,10 @@ export default defineComponent({
     MiningPoolCard,
     Swiper,
     SwiperSlide,
+    Modal
   },
 
   setup() {
-
-    const showConfirmationDialog = () => {
-      showConfirmation.value = true;
-    };
-    const isDialogVisible = ref(false);
-    const popupParams = ref({
-      param1: '',
-      param2: '',
-      param3: '',
-    });
-    const showPopupHandler= (param1, param2, param3)=> {
-    };
-
-    const closePopup = () => {
-      isDialogVisible.value = false;
-    };
     const data = reactive({
       msg: '数字货币利好哪些股 深圳试点数字货币概念股',
       img: img,
@@ -192,16 +175,13 @@ export default defineComponent({
       count: 0,
     });
     const bannerArr = ref([])
+    const miningPoolCardRef = ref(null);
+    const modalRef = ref(null);
 
-    const onSwiper = (swiper) => {
-      console.log(swiper);
+
+    const openParentModal = () => {
+      modalRef.value.isVisible = true
     };
-    const onSlideChange = () => {
-      console.log('slide change');
-    };
-
-
-
     // 查询首页轮播图
     const getBanner = () => {
       post('client/homeBanner')
@@ -211,7 +191,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          console.log(err, '------cuowu');
+          console.log(err);
         });
     }
 
@@ -222,7 +202,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          console.log(err, '------cuowu');
+          console.log(err);
         });
     };
     
@@ -232,32 +212,15 @@ export default defineComponent({
       // 查询eth价格
       getEthPrice();
     });
-    const showConfirmation = ref(false);
-    // const bannerArr = ref([])
 
 
-    const handleClose = (action) => {
-      // 处理弹窗关闭事件
-    };
-
-    const handleConfirm = () => {
-      // 处理弹窗确认事件
-      showConfirmation.value = false;
-    };
 
     return {
       ...data,
-      isDialogVisible,
-      popupParams,
-      showPopupHandler,
-      closePopup,
       bannerArr,
-      onSwiper,
-      onSlideChange,
-      showConfirmation,
-      showConfirmationDialog,
-      handleClose,
-      handleConfirm,
+      miningPoolCardRef,
+      modalRef,
+      openParentModal,
       modules: [Navigation, Pagination, Scrollbar, A11y],
     };
   },

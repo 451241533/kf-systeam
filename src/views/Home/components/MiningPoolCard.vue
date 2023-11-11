@@ -41,43 +41,30 @@
                     <div @click="clickToBuyPage"
                         :class="['btn', { 'ableToPurchase-btn': data.can, 'noableToPurchase-btn': data.none, }]">
                         参与挖矿
-                    </div> <img v-show="data.none" class="questionIcon" src="../images/wenhao.png" @click="showPopupHandler" alt="">
+                    </div>
+                    <img v-show="data.none" class="questionIcon" src="../images/wenhao.png" @click="openParentModal"
+                        alt="">
                 </div>
             </div>
-           
+
         </div>
     </div>
-    
 </template>
 <script>
-import { ref, defineProps, defineEmits,defineComponent } from 'vue';
+import { ref, defineProps, defineEmits, defineComponent, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
 export default defineComponent({
     name: 'kcCard',
     props: {
-  },
-    setup({data}, { emit }) {
-        const showPopup = () => {
-      emit('card-click', '参数1', '参数2', '参数3');
-    };
-    const showConfirmationDialog = () => {
-      emit('show-confirmation');
-    };
-    const showPopupHandler = () => {
-      emit('show-popup', '参数1', '参数2', '参数3');
-    };
-
-        const showConfirmation = ref(data.showConfirmation);
-        const showPopover = ref(false);
-        const router = useRouter()
-    const handleConfirm = () => {
-      showConfirmation.value = false;
-    };
-        const handleClose = (action) => {
-            if (action === 'confirm') {
-            }
+    },
+    setup({ data }, { emit }) {
+        // 调用父组件的弹窗方法
+        const openParentModal = () => {
+            emit('open-parent-modal', '参数1', '参数2', '参数3');
         };
+
+        const router = useRouter()
 
         const onSelect = (action) => showToast(action.text);
         const clickToBuyPage = () => {
@@ -95,14 +82,8 @@ export default defineComponent({
         return {
             data,
             onSelect,
-            showPopup,
-            showPopover,
             clickToBuyPage,
-            showPopupHandler,
-            showConfirmation,
-            showConfirmationDialog,
-            handleClose,
-            handleConfirm,
+            openParentModal
         };
     },
     props: {
@@ -110,50 +91,6 @@ export default defineComponent({
             type: Object,
             require: true,
         },
-        // kcType: {
-        //     type: String,
-        //     default: '初级池'
-        // },
-        // kcRuleText: {
-        //     type: String,
-        //     default: '收益每日可取 翻倍出局 | U本位 本金不波动 收益稳定'
-        // },
-        // ruleCardText: {
-        //     type: String,
-        //     default: '本金质押翻倍'
-        // },
-        // interestRateNumber: {
-        //     type: Number,
-        //     default: 0.4
-        // },
-        // ordinary: {
-        //     type: Boolean,
-        //     default: false // 或者根据需要设置默认值
-        // },
-        // image: {
-        //     type: String,
-        //     default: ''
-        // },
-        // incomeRuleFirstText: {
-        //     type: String,
-        // },
-        // incomeRuleSecondText: {
-        //     type: String,
-        // },
-        // can: {
-        //     type: Boolean,
-        //     default: ''
-        // },
-        // none: {
-        //     type: Boolean,
-        //     default: ''
-
-        // },
-        // // ordinary:Boolean,
-        // periodic: Boolean,
-        // advanced: Boolean,
-
-
     },
 })
 </script>
