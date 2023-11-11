@@ -26,6 +26,7 @@
           <MiningPoolCard :key="index" :data="item"   
           ref="miningPoolCardRef"
           @open-parent-modal="openParentModal"
+          @open-buy-tips-page="openBuyPowerModal(item.kcType)" 
          />
         </div>
       </div>
@@ -45,14 +46,16 @@
         </div>
       </div>
     </div>
-    <Modal ref="modalRef"  />
+    <QuestionTipsModal ref="modalRef" />
+    <BuyPowerTipsModal  ref="BuyPowerModalRef"  />
   </div>
 </template>
 
 <script>
 import {  ref, reactive, onMounted, defineComponent } from 'vue';
 import Footer from '../../components/Footer.vue';
-import Modal from '../../components/Modal.vue'
+import QuestionTipsModal from './components/QuestionTipsModal.vue'
+import BuyPowerTipsModal from './components/BuyPowerTipsModal.vue'
 import MiningPoolCard from './components/Miningpoolcard.vue';
 import { post } from '../../utils/request';
 import img from './notice.png';
@@ -71,7 +74,8 @@ export default defineComponent({
     MiningPoolCard,
     Swiper,
     SwiperSlide,
-    Modal
+    QuestionTipsModal,
+    BuyPowerTipsModal
   },
 
   setup() {
@@ -90,7 +94,8 @@ export default defineComponent({
             image: ptkcImage,
             can: true,
             none: false,
-            ordinary: true
+            ordinary: true,
+            isFiveDay: true
           },
           {
             kcType: '矿工池',
@@ -102,7 +107,8 @@ export default defineComponent({
             incomeBottomText: '基础池开通5天方可购',
             image: ptkcImage,
             none: true,
-            ordinary: true
+            ordinary: true,
+            isFiveDay: false,
           },
           {
             kcType: '矿长池',
@@ -177,11 +183,18 @@ export default defineComponent({
     const bannerArr = ref([])
     const miningPoolCardRef = ref(null);
     const modalRef = ref(null);
+    const BuyPowerModalRef = ref(null)
+
 
 
     const openParentModal = () => {
       modalRef.value.isVisible = true
     };
+
+    const openBuyPowerModal =(kcTypeString)=>{
+      BuyPowerModalRef.value.open(kcTypeString)
+      BuyPowerModalRef.value.miningPoolName = kcTypeString
+    }
     // 查询首页轮播图
     const getBanner = () => {
       post('client/homeBanner')
@@ -221,6 +234,9 @@ export default defineComponent({
       miningPoolCardRef,
       modalRef,
       openParentModal,
+      // B
+      BuyPowerModalRef,
+      openBuyPowerModal,
       modules: [Navigation, Pagination, Scrollbar, A11y],
     };
   },

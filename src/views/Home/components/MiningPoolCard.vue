@@ -38,7 +38,8 @@
             <div class="line"></div>
             <div class="card-bottom-btn-mode">
                 <div class="btn-mode">
-                    <div @click="clickToBuyPage"
+                    <div @click=" clickToBuyPage"
+                    
                         :class="['btn', { 'ableToPurchase-btn': data.can, 'noableToPurchase-btn': data.none, }]">
                         参与挖矿
                     </div>
@@ -51,7 +52,7 @@
     </div>
 </template>
 <script>
-import { ref, defineProps, defineEmits, defineComponent, getCurrentInstance } from 'vue';
+import {  defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
 export default defineComponent({
@@ -59,31 +60,38 @@ export default defineComponent({
     props: {
     },
     setup({ data }, { emit }) {
-        // 调用父组件的弹窗方法
         const openParentModal = () => {
-            emit('open-parent-modal', '参数1', '参数2', '参数3');
+            emit('open-parent-modal');
+        };
+
+        const openBuyPowerModal = (kcTypeString) => {
+            console.log(data.can)
+            emit('open-buy-tips-page', kcTypeString);
         };
 
         const router = useRouter()
-
+        
         const onSelect = (action) => showToast(action.text);
         const clickToBuyPage = () => {
-
-            console.log(data.kcType, '-------------datadata')
-            if (!!data.none) return false
-            router.push({
-                name: 'buypage', // 路由名称
+            if(data.can){
+                router.push({
+                name: 'buypage',
                 query: {
                     currentType: data.kcType,
                 },
             });
+            }else{
+                openBuyPowerModal()
+            }
+            
         }
 
         return {
             data,
             onSelect,
             clickToBuyPage,
-            openParentModal
+            openParentModal,
+            openBuyPowerModal
         };
     },
     props: {

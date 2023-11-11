@@ -65,7 +65,6 @@ export default {
   align-items: center;
   font-size: 13px;
   z-index: 999;
-  /* 保证在最上层 */
   width: 100vw;
   height: 80vh;
 
@@ -76,7 +75,6 @@ export default {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     max-width: 400px;
-    /* 设置你期望的最大宽度 */
     width: 100%;
     height: auto;
 
@@ -106,7 +104,6 @@ export default {
         padding: 6px;
         border: 1px solid #ddd;
         vertical-align: middle;
-        /* 垂直居中 */
       }
     }
   }
