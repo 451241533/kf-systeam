@@ -12,22 +12,19 @@
         </van-swipe>
         <div class="title-top">
           <div class="left">
-              <img src="./images/jckcIcon.png" />
-              <p>基础矿池</p>
-            </div>
-            <div class="right">
-              <img src="./images/H.png" />
-              <p>矿池规则</p>
-            </div>
+            <img src="./images/jckcIcon.png" />
+            <p>基础矿池</p>
+          </div>
+          <div class="right">
+            <img src="./images/H.png" />
+            <p>矿池规则</p>
+          </div>
         </div>
       </div>
       <div class="homeKcCard-Group">
         <div v-for="(item, index) in cardData.jcKc">
-          <MiningPoolCard :key="index" :data="item"   
-          ref="miningPoolCardRef"
-          @open-parent-modal="openParentModal"
-          @open-buy-tips-page="openBuyPowerModal(item.kcType)" 
-         />
+          <MiningPoolCard :key="index" :data="item" ref="miningPoolCardRef" @open-parent-modal="openParentModal"
+            @open-buy-tips-page="openBuyPowerModal(item.kcType)" />
         </div>
       </div>
       <div class="adjust-mode">
@@ -37,22 +34,18 @@
         </div>
         <div class="adjust-card-group">
           <div v-for="(item, index) in cardData.gjKc" :key="index">
-            <MiningPoolCard :data="item" 
-            ref="miningPoolCardRef"
-          @open-parent-modal="openParentModal"
-            :key="index"
-            />
+            <MiningPoolCard :data="item" ref="miningPoolCardRef" @open-parent-modal="openParentModal" :key="index" />
           </div>
         </div>
       </div>
     </div>
     <QuestionTipsModal ref="modalRef" />
-    <BuyPowerTipsModal  ref="BuyPowerModalRef"  />
+    <BuyPowerTipsModal ref="BuyPowerModalRef" />
   </div>
 </template>
 
 <script>
-import {  ref, reactive, onMounted, defineComponent } from 'vue';
+import { ref, reactive, onMounted, defineComponent } from 'vue';
 import Footer from '../../components/Footer.vue';
 import QuestionTipsModal from './components/QuestionTipsModal.vue'
 import BuyPowerTipsModal from './components/BuyPowerTipsModal.vue'
@@ -156,10 +149,10 @@ export default defineComponent({
             interestRateNumber: '1.0', //日收益
             incomeRuleFirstText: '收益每日可取 翻倍出局',
             incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
-            incomeBottomText:'需用400USDT价值的平台币购买',
+            incomeBottomText: '需用400USDT价值的平台币购买',
             image: ptkcImage,
             can: false,
-            none:true,
+            none: true,
             advanced: true
           },
           {
@@ -169,10 +162,10 @@ export default defineComponent({
             interestRateNumber: '0.8', //日收益
             incomeRuleFirstText: '收益每日可取 翻倍出局',
             incomeRuleSecondText: 'U本位 本金不波动 收益稳定',
-            incomeBottomText:'需用400USDT价值的平台币购买',
+            incomeBottomText: '需用400USDT价值的平台币购买',
             image: ptkcImage,
             can: false,
-            none:true,
+            none: true,
             periodic: true
           },
         ],
@@ -191,7 +184,7 @@ export default defineComponent({
       modalRef.value.isVisible = true
     };
 
-    const openBuyPowerModal =(kcTypeString)=>{
+    const openBuyPowerModal = (kcTypeString) => {
       BuyPowerModalRef.value.open(kcTypeString)
       BuyPowerModalRef.value.miningPoolName = kcTypeString
     }
@@ -218,7 +211,7 @@ export default defineComponent({
           console.log(err);
         });
     };
-    
+
     onMounted(() => {
       // 查询轮播图
       getBanner();
@@ -287,30 +280,34 @@ export default defineComponent({
         }
       }
 
-      .title-top{
+      .title-top {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: auto 15px;
-        .left{
+
+        .left {
           display: flex;
           justify-content: space-between;
           align-items: center;
           font-size: 16px;
           color: #ffffffcc;
-          img{
+
+          img {
             margin-right: 5px;
             width: 18px;
             height: 18px;
           }
         }
-        .right{
+
+        .right {
           display: flex;
           justify-content: space-between;
           align-items: center;
           color: #ffffff99;
           font-size: 12px;
-          img{
+
+          img {
             margin-right: 5px;
             width: 16px;
             height: 16px;
@@ -368,4 +365,5 @@ export default defineComponent({
     }
   }
 
-}</style>
+}
+</style>

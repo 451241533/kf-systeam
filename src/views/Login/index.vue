@@ -1,5 +1,4 @@
 <template>
-    <!-- <van-nav-bar  left-text="返回" left-arrow border="false" @click-left="onClickLeft" /> -->
     <NavTopBar :title="returnTitle"></NavTopBar>
     <div class="mine">
         <div class="topCard">
@@ -17,72 +16,68 @@
     </div>
 </template>
 <script>
-import { post } from  '../../utils/request'
-
+import { post } from '../../utils/request'
+import tp from 'tp-js-sdk'
 export default {
     name: 'login',
     data() {
         return {
-            returnTitle: '注册/登录'
+            returnTitle: '注册/登录',
+            signedMsg:'',
+            account:''
         }
     },
-    setup() {
-        const onClickLeft = () => history.back();
-        return {
-            onClickLeft,
-        };
-    },
     mounted() {
-    // this.beforeunload()
-    // this.unload()
-    this.beforGetNotice()
-  },
+        // 获取钱包用户信息
+        this.getWellet()
+        this.beforGetNotice()
+    },
     methods: {
-        beforGetNotice(){
-            post('api/getNotice').then(res=>{
-                console.log(res, '---------res')
-                if(res.error === 0){
-                    // window.alert(res.data.msg)
+        async getWellet() {
+            const currentWallet = await tp.getCurrentWallet();
+            console.log('获取用户当前钱包信息', currentWallet)
+            if (window.ethereum) {
+                const ethereum = window.ethereum;
+                this.account = currentWallet.data.address;
+                // 获取签名
+                ethereum.request({
+                    method: 'personal_sign',
+                    params: [currentWallet.data.address, 'abc123']
+                })
+                    .then(balance => {
+                        console.log('看看是否成功Account Balance:', balance);
+                        this.signedMsg = balance
+                    })
+                    .catch(error => {
+                        console.error('Error getting balance:', error);
+                    });
+            } else {
+                console.error('MetaMask is not detected.');
+            }
+        },
+        beforGetNotice() {
+            post('api/getNotice').then(res => {
+                if (res.error === 0) {
                     console.log(res.data.msg)
-                    // localStorage.setItem('AUTH-CODE',res.data.data)
-                    // this.$router.push('/home')
                 }
-            }).catch(err=>{
-                console.log(err, '------cuowu')
+            }).catch(err => {
+                console.log(err)
             })
         },
         loginHandleAuth() {
-            //  0x6288844254443F95FCa2571bC13A3bbBb6C6087d  已注册——有币
-
-            //  文档提供—— 0x6A5A42F785F4181075e6D4f68a984F00e43EeAee
             const params = {
-                account: '0x6A5A42F785F4181075e6D4f68a984F00e43EeAee',
+                account: this.account,
                 hexMsg: 'abc123',
-                signedMsg: '0x089ea5a192fc25179723d30cd120839037eda67284029a4f8b43ebfc7c70eaa4279b22ab29b2b22aba147381618c609822c97c5dcc5542d048b1dc67ca2500dd1c'
+                signedMsg: this.signedMsg
             }
-
-            post('api/login',params).then(res=>{
-                if(res.error === 0){
-                    localStorage.setItem('AUTH-CODE',res.data)
+            post('api/login', params).then(res => {
+                if (res.error === 0) {
+                    localStorage.setItem('AUTH-CODE', res.data)
                     this.$router.push('/home')
                 }
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err)
             })
-
-            // axios.post('api/login'), ({
-            //     params
-            // })
-            //     .then(response => {
-
-            //         // 请求成功处理逻辑
-            //         console.log(response.data);
-            //     })
-            //     .catch(error => {
-            //         // 请求失败处理逻辑
-            //         console.error(error);
-            //     })
-            // this.$router.push('/home')
         },
     }
 };
@@ -91,7 +86,6 @@ export default {
 <style lang="less" scoped>
 .mine {
     display: flex;
-    // justify-content: center;
     align-items: center;
     flex-flow: column;
     height: 100%;
@@ -105,11 +99,7 @@ export default {
         width: 380px;
         height: 220px;
         border-radius: 6px;
-        // border: 2px solid red;
         background-color: #1f2e58;
-        // .icon{
-
-        // }
         ::v-deep .van-image__img {
             border-radius: 10px !important;
         }

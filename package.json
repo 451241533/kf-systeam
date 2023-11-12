@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 192.168.0.104",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -21,7 +21,8 @@
     "vant": "^4.7.0",
     "vue": "^3.3.4",
     "vue-awesome-swiper": "^5.0.1",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "web3": "^4.2.2"
   },
   "devDependencies": {
     "@vant/auto-import-resolver": "^1.0.1",

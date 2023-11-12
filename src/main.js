@@ -7,12 +7,8 @@ import VueAwesomeSwiper from 'vue-awesome-swiper';
 import NavTopBar from "./components/NavTopBar.vue"
 import SureBtn from './components/SureBtn.vue'
 import 'swiper/css';
-// import TokenPocketSDK from 'tokenpocket-sdk'
-import tp  from 'tp-js-sdk'
-// console.log(tp.isConnected(), '-----------12321312312');
 import router from './router/index'
 import axios from 'axios'
-
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('AUTH-CODE')}`
 
