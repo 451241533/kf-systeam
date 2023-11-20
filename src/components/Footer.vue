@@ -19,6 +19,7 @@ import promotion from '../assets/images/promotion.png'
 export default {
     data() {
         return {
+            showFooter: false, // 默认显示 Footer
             active: 0, //默认选中tab
             tabbars:[
                 {
