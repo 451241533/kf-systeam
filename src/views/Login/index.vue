@@ -65,19 +65,7 @@ export default {
             })
         },
         loginHandleAuth() {
-            const params = {
-                account: this.account,
-                hexMsg: 'abc123',
-                signedMsg: this.signedMsg
-            }
-            post('api/login', params).then(res => {
-                if (res.error === 0) {
-                    localStorage.setItem('AUTH-CODE', res.data)
-                    this.$router.push('/home')
-                }
-            }).catch(err => {
-                console.log(err)
-            })
+            this.$router.push('/home')
         },
     }
 };

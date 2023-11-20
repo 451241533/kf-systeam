@@ -4,7 +4,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('../views/Login/index.vue'),
+      component: () => import('../views/Home/index.vue'),
       meta: {
         keepAlive: true,
         showFooter: false,
@@ -21,11 +21,6 @@ const router = createRouter({
     {
       path: '/home',
       component: () => import('../views/Home/index.vue'),
-      meta: {
-        keepAlive: true,
-        showFooter: true,
-        requiresAuth: true,
-      },
     },
     {
       path: '/buypage',
@@ -33,11 +28,6 @@ const router = createRouter({
       component: () => import('../views/Home/components/BuyPage.vue'),
 
       props: route => ({ currentType: route.query.currentType }),
-      meta: {
-        keepAlive: true,
-        showFooter: false,
-        requiresAuth: true,
-      }
     },
     {
       path: '/buypower',
@@ -45,38 +35,23 @@ const router = createRouter({
       component: () => import('../views/Home/components/BuyPower.vue'),
 
       props: route => ({ currentType: route.query.currentType }),
-      meta: {
-        keepAlive: true,
-        showFooter: false,
-        requiresAuth: true,
-      }
     },
     {
       path: '/income',
       component: () => import('../views/Income/index.vue'),
-      meta: {
-        keepAlive: true,
-        showFooter: true,
-        requiresAuth: true,
-      }
     },
     {
       path: '/mine',
       component: () => import('../views/Mine/index.vue'),
-      meta: {
-        keepAlive: true,
-        showFooter: true,
-        requiresAuth: true,
-      }
     },
     {
       path: '/promotion',
       component: () => import('../views/Promotion/index.vue'),
-      meta: {
-        keepAlive: true,
-        showFooter: true,
-        requiresAuth: true,
-      }
+      // meta: {
+      //   keepAlive: true,
+      //   showFooter: true,
+      //   requiresAuth: true,
+      // }
     },
 
   ]

@@ -1,5 +1,5 @@
 <template>
-    <div class="footerMain" v-if="showFooter" >
+    <div class="footerMain">
         <van-tabbar v-model="active"   active-color="#fffffb2" inactive-color="#eeeee">
             <van-tabbar-item :to="(item.name)" @click="tabIndex(index)" v-for="(item, index) in tabbars"
                 :key="'tabbar' + index">
